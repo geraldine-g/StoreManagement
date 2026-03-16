@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="StoreManagement/StoreManagement.csproj" />
+  <Project Path="StoreManagementAppService/StoreManagementAppService.csproj" />
+  <Project Path="StoreManagementDataService/StoreManagementDataService.csproj" />
+  <Project Path="StoreManagementModels/StoreManagementModels.csproj" />
+</Solution>
