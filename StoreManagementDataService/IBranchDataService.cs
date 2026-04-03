@@ -9,8 +9,8 @@ namespace StoreManagementDataService
     {
         void Add(Branch branch);
         List<Branch> GetBranches();
-        Branch GetById(int id);
+        Branch GetById(Guid id);
         void Update(Branch branch);
-        void Remove(int id);
+        void Remove(Guid id);
     }
 }

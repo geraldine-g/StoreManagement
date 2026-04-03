@@ -1,51 +1,44 @@
-﻿using System;
+﻿using StoreManagementModels;
+using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Text;
-using StoreManagementModels;
 
 namespace StoreManagementDataService
 {
-    public class BranchDataService : IBranchDataService
+    public class BranchDataService
     {
-        private BranchDBData db;
+        private IBranchDataService _dataSource;
 
-        public BranchDataService(BranchDBData dbData)
+        
+        public BranchDataService(IBranchDataService dataSource)
         {
-            db = dbData;
+            _dataSource = dataSource;
         }
 
         public void Add(Branch branch)
         {
-            db.branches.Add(branch);
+            _dataSource.Add(branch);
         }
 
         public List<Branch> GetBranches()
         {
-            return db.branches;
+            return _dataSource.GetBranches();
         }
 
-        public Branch GetById(int id)
+        public Branch GetById(Guid id)
         {
-            return db.branches.FirstOrDefault(b => b.BranchId == id);
+            return _dataSource.GetById(id);
         }
 
         public void Update(Branch branch)
         {
-            var existing = GetById(branch.BranchId);
-
-            if (existing != null)
-            {
-                existing.BranchName = branch.BranchName;
-                existing.BranchLocation = branch.BranchLocation;
-            }
+            _dataSource.Update(branch);
         }
 
-        public void Remove(int id)
+        public void Remove(Guid id)
         {
-            var branch = GetById(id);
-
-            if (branch != null)
-                db.branches.Remove(branch);
+            _dataSource.Remove(id);
         }
     }
 }

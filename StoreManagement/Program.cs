@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using StoreManagementModels;
 using StoreManagementAppService;
+using StoreManagementDataService;
 
 namespace StoreManagement
 {
     internal class Program
     {
-        static string[] branchName = new string[5];
-        static string[] branchLocation = new string[5];
+        static BranchAppService branchService =
+            new BranchAppService(new BranchJsonData());
 
-        static List<string> accessLogs = new List<string>();
+        
+
         static void Main(string[] args)
         {
             Console.WriteLine("STORE BRANCH MANAGER\n");
-            PopulateBranches();
             bool isRunning = true;
 
             while (isRunning)
@@ -51,49 +52,43 @@ namespace StoreManagement
                         break;
                 }
             }
-            static void PopulateBranches()
-            {
-                branchName[0] = "Main Branch";
-                branchLocation[0] = "Manila";
 
-                branchName[1] = "North Branch";
-                branchLocation[1] = "Baguio City";
-
-                branchName[2] = "South Branch";
-                branchLocation[2] = "Binan City";
-            }
             static void addBranch()
             {
-                for (int i = 0; i < branchName.Length; i++)
-                {
-                    if (branchName[i] == null)
-                    {
+                
                         Console.WriteLine("ADD A NEW STORE BRANCH\n");
+
+                        Branch newBranch = new Branch();
+
                         Console.WriteLine("Enter Desired Store Branch Name: ");
-                        branchName[i] = Console.ReadLine();
+                        newBranch.BranchName = Console.ReadLine();
 
                         Console.WriteLine("Enter Branch Location: ");
-                        branchLocation[i] = Console.ReadLine();
+                        newBranch.BranchLocation = Console.ReadLine();
+
+                        branchService.AddBranch(newBranch);
 
                         Console.WriteLine("Branch added successfully!");
                         return;
 
-                    }
-                }
+                    
+                
             }
 
             static void ViewBranch()
             {
                 Console.WriteLine("\nVIEW BRANCH INFORMATION\n");
-                for (int i = 0; i < branchName.Length; i++)
-                {
-                    if (branchName[i] != null)
-                    {
-                        Console.WriteLine($"Branch No: {i}");
-                        Console.WriteLine($"Branch Name: {branchName[i]}");
-                        Console.WriteLine($"Branch Location: {branchLocation[i]}");
 
-                    }
+                var branches = branchService.GetBranches();
+
+                for (int i = 0; i < branches.Count; i++)
+                {
+                    
+                        Console.WriteLine($"Branch No: {i}");
+                        Console.WriteLine($"Branch Name: {branches[i].BranchName}");
+                        Console.WriteLine($"Branch Location: {branches[i].BranchLocation}");
+
+                    
                 }
             }
 
@@ -101,15 +96,28 @@ namespace StoreManagement
             static void UpdateBranch()
             {
                 Console.WriteLine("\nUPDATE A BRANCH\n");
+
+                var branches = branchService.GetBranches();
+
+                for (int i = 0; i < branches.Count; i++)
+                {
+                    Console.WriteLine($"[{i}] {branches[i].BranchName} - {branches[i].BranchLocation}");
+                }
+
                 Console.WriteLine("Enter Branch No.: ");
                 int index = Convert.ToInt32(Console.ReadLine());
-                if (index >= 0 && index < branchName.Length && branchName[index] != null)
+                if (index >= 0 && index < branches.Count)
                 {
+                    var updated = branches[index];
+                    
+
                     Console.WriteLine("Enter New Branch Name: ");
-                    branchName[index] = Console.ReadLine();
+                    updated.BranchName = Console.ReadLine();
 
                     Console.WriteLine("Enter New Branch Location: ");
-                    branchLocation[index] = Console.ReadLine();
+                    updated.BranchLocation = Console.ReadLine();
+
+                    branchService.UpdateBranch(updated);
 
                     Console.WriteLine("Branch updated successfully!");
                 }
@@ -122,12 +130,22 @@ namespace StoreManagement
             static void RemoveBranch()
             {
                 Console.WriteLine("\nREMOVE A BRANCH\n");
+
+                var branches = branchService.GetBranches();
+
+                for (int i = 0; i < branches.Count; i++)
+                {
+                    Console.WriteLine($"[{i}] {branches[i].BranchName} - {branches[i].BranchLocation}");
+                }
+
                 Console.WriteLine("Enter Branch Number to Remove: ");
                 int index = Convert.ToInt32(Console.ReadLine());
-                if (index >= 0 && index < branchName.Length && branchName[index] != null)
+                if (index >= 0 && index < branches.Count)
                 {
-                    branchName[index] = null;
-                    branchLocation[index] = null;
+                    var removed = branches[index];
+
+                    branchService.RemoveBranch(removed.BranchId);
+                    
                     Console.WriteLine("Branch removed successfully!");
                 }
                 else
