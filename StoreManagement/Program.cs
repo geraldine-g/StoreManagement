@@ -9,10 +9,9 @@ namespace StoreManagement
 {
     internal class Program
     {
-        static BranchAppService branchService =
-            new BranchAppService(new BranchJsonData());
+        static BranchAppService branchService = new BranchAppService(new BranchDBData());
 
-        
+
 
         static void Main(string[] args)
         {

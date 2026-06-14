@@ -20,7 +20,7 @@ namespace StoreManagementDataService
 
             Load();
         }
-
+        
         private void Load()
         {
             string json = File.ReadAllText(filePath);
